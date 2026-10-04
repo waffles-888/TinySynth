@@ -1,9 +1,14 @@
 <body>
-  <h1>it works!</h1>
+  <button onclick="oscillator.start()">Start sound</button>
   <style>
     body { background: black; color: white; font-family: sans-serif; }
   </style>
   <script>
-    alert('hello')
+    const audioContext = new AudioContext();
+    const oscillator = audioContext.createOscillator();
+
+    oscillator.type = 'square';
+    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+    oscillator.connect(audioContext.destination);
   </script>
 </body>
