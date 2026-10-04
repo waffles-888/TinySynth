@@ -1,1 +1,1 @@
-data:text/html,<body><button onclick="startSound()">Start sound</button><button onclick="stopSound()">Stop sound</button><style>body{background:black;color:white;font-family:sans-serif}</style><script>(new AudioContext).createOscillator();</script></body>
+data:text/html,<body><button onclick="startSound()">Start sound</button><button onclick="stopSound()">Stop sound</button><style>body{background:black;color:white;font-family:sans-serif}</style><script>new AudioContext;</script></body>
