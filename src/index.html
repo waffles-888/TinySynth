@@ -1,6 +1,6 @@
 <body>
   <button onclick="start()">Start sound</button>
-  <button onclick="oscillator.stop()">Stop sound</button>
+  <button onclick="stop()">Stop sound</button>
   <style>
     body { background: black; color: white; font-family: sans-serif; }
   </style>
@@ -8,6 +8,7 @@
     const audioContext = new AudioContext();
     let oscillator = audioContext.createOscillator();
 
+    // Start for the oscillator
     function start() {
     oscillator = audioContext.createOscillator();
     oscillator.type = 'square';
@@ -15,5 +16,11 @@
     oscillator.connect(audioContext.destination);
     oscillator.start();
     }
+
+    // stop for the oscillator
+    function stop() {
+      oscillator.stop();
+    }
+
   </script>
 </body>

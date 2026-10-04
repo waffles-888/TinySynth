@@ -1,1 +1,1 @@
-<body><button onclick="oscillator.start()">Start sound</button><style>body{background:black;color:white;font-family:sans-serif}</style><script>const e=new AudioContext,t=e.createOscillator();t.type="sine",t.frequency.setValueAtTime(440,e.currentTime),t.connect(e.destination),t.start();</script></body>
+<body><button onclick="start()">Start sound</button><button onclick="stop()">Stop sound</button><style>body{background:black;color:white;font-family:sans-serif}</style><script>(new AudioContext).createOscillator();</script></body>
