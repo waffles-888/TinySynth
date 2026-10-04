@@ -1,15 +1,18 @@
 <body>
-  <button onclick="start()">Start sound</button>
-  <button onclick="stop()">Stop sound</button>
+  <button onclick="startSound()">Start sound</button>
+  <button onclick="stopSound()">Stop sound</button>
   <style>
     body { background: black; color: white; font-family: sans-serif; }
   </style>
   <script>
     const audioContext = new AudioContext();
-    let oscillator = audioContext.createOscillator();
+    let oscillator;
 
-    // Start for the oscillator
-    function start() {
+    // Oscillator start
+    function startSound() {
+        if (oscillator) {
+            return;
+        }
     oscillator = audioContext.createOscillator();
     oscillator.type = 'square';
     oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
@@ -17,9 +20,11 @@
     oscillator.start();
     }
 
-    // stop for the oscillator
-    function stop() {
+    // Oscillator stop
+    function stopSound() {
       oscillator.stop();
+        oscillator.disconnect();
+        oscillator = null;
     }
 
   </script>
