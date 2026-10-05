@@ -1,7 +1,7 @@
 <body>
   <button onclick="startSound()">Start sound</button>
   <button onclick="stopSound()">Stop sound</button>
-  <input type="range" min="100" max="1000">
+  <input id="pitch" type="range" min="100" max="1000" value="440" oninput="changePitch()">
   <style>
     body { background: black; color: white; font-family: sans-serif; }
   </style>
@@ -28,5 +28,13 @@
         oscillator = null;
     }
 
+    // Change pitch
+    function changePitch() {
+      if (!oscillator) {
+        return;
+      }
+        const pitch = document.querySelector('#pitch').value;
+        oscillator.frequency.setValueAtTime(pitch, audioContext.currentTime);
+      }
   </script>
 </body>
