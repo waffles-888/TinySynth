@@ -1,9 +1,20 @@
 <body>
+<div>
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+    <h1>TinySynth</h1>
+    <h2>Current pitch: <span id="current-pitch"></span> Hz</h2>
+    <p>Use the buttons to start and stop the sound, and the slider to change the pitch.</p>
+  </div>
+  <div class="controls">
   <button onclick="startSound()">Start sound</button>
   <button onclick="stopSound()">Stop sound</button>
-  <input id="pitch" type="range" min="100" max="1000" value="440" oninput="changePitch()">
+</div>
+<div class="slider">
+  <input id="pitch" type="range" min="100" max="1000" value="440" oninput="changePitch(), document.querySelector('#current-pitch').innerHTML = this.value">
+  </div>
+</div>
   <style>
-    body { background: black; color: white; font-family: sans-serif; }
+    body { background: #030164; color: #E8E085; font-family: sans-serif; }
   </style>
   <script>
     const audioContext = new AudioContext();
@@ -16,7 +27,7 @@
         }
     oscillator = audioContext.createOscillator();
     oscillator.type = 'square';
-    oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+    oscillator.frequency.setValueAtTime(document.querySelector('#pitch').value, audioContext.currentTime);
     oscillator.connect(audioContext.destination);
     oscillator.start();
     }
@@ -28,13 +39,18 @@
         oscillator = null;
     }
 
+    // Update current pitch display
+    var currentPitch = document.querySelector('#current-pitch');
+    currentPitch.innerHTML = document.querySelector('#pitch').value
+
     // Change pitch
     function changePitch() {
+      const pitch = document.querySelector('#pitch').value;
       if (!oscillator) {
         return;
       }
-        const pitch = document.querySelector('#pitch').value;
         oscillator.frequency.setValueAtTime(pitch, audioContext.currentTime);
+        document.querySelector('#current-pitch').innerHTML = pitch;
       }
   </script>
 </body>
