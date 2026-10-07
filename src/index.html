@@ -1,6 +1,6 @@
 <body>
-<div>
-  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+<div style = "accent-color: #E8E085; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+  <div>
     <h1>TinySynth</h1>
     <h2>Current pitch: <span id="current-pitch"></span> Hz</h2>
     <p>Use the buttons to start and stop the sound, and the slider to change the pitch.</p>
@@ -11,6 +11,11 @@
 </div>
 <div class="slider">
   <input id="pitch" type="range" min="100" max="1000" value="440" oninput="changePitch(), document.querySelector('#current-pitch').innerHTML = this.value">
+  <label for="pitch">Pitch</label>
+  </div>
+  <div class="slider">
+  <input id="volume" type="range" min="0" max="1" step="0.01" value="0.5" oninput="gainNode.gain.value = this.value">
+  <label for="volume">Volume</label>
   </div>
 </div>
   <style>
@@ -28,7 +33,7 @@
     oscillator = audioContext.createOscillator();
     oscillator.type = 'square';
     oscillator.frequency.setValueAtTime(document.querySelector('#pitch').value, audioContext.currentTime);
-    oscillator.connect(audioContext.destination);
+    oscillator.connect(gainNode);
     oscillator.start();
     }
 
@@ -52,5 +57,12 @@
         oscillator.frequency.setValueAtTime(pitch, audioContext.currentTime);
         document.querySelector('#current-pitch').innerHTML = pitch;
       }
+
+      // volume
+      const volumeSlider = document.querySelector('#volume');
+      const gainNode = audioContext.createGain();
+      gainNode.gain.value = 0.5;
+      gainNode.connect(audioContext.destination);
+
   </script>
 </body>
