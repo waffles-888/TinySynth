@@ -13,7 +13,7 @@
   <button onclick="randomPitch()">Random Pitch</button>
   <button onclick="startSound()">Start sound</button>
   <button onclick="stopSound()">Stop sound</button>
-  <select id="form-select" onchange="changeWave()">
+  <select style="background: #E8E085;" id="wave-select" onchange="changeWave()">
     <option value="square">Square</option>
     <option value="sine">Sine</option>
     <option value="triangle">Triangle</option>
@@ -43,7 +43,7 @@
             return;
         }
     oscillator = audioContext.createOscillator();
-    const wave = document.querySelector('#form-select').value;
+    const wave = document.querySelector('#wave-select').value;
     oscillator.type = wave;
     oscillator.frequency.setValueAtTime(document.querySelector('#pitch').value, audioContext.currentTime);
     oscillator.connect(gainNode);
@@ -69,7 +69,7 @@
 
       // Change waveform
       function changeWave() {
-        const wave = document.querySelector('#form-select').value;
+        const wave = document.querySelector('#wave-select').value;
         if (!oscillator) {
           return;
         }
