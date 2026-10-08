@@ -65,12 +65,6 @@
         oscillator.frequency.setValueAtTime(pitch, audioContext.currentTime);
       }
 
-      // Waveform visualization
-      const canvas = document.querySelector('#waveform');
-      const canvasCtx = canvas.getContext('2d');
-      canvasCtx.fillStyle = '#363199';
-      canvasCtx.fillRect(0, 0, 1000, 1000);
-
       //waveform sound
       const analyser = audioContext.createAnalyser();
       analyser.connect(audioContext.destination);
@@ -86,6 +80,19 @@
       const newPitch = Math.round(Math.random() * (1000 - 100) + 100);
       document.querySelector('#pitch').value = newPitch;
       changePitch();
+      }
+
+      // Waveform visualization
+      const canvas = document.querySelector('#waveform');
+      const canvasCtx = canvas.getContext('2d');
+      canvasCtx.fillStyle = '#363199';
+      canvasCtx.fillRect(0, 0, 1000, 1000);
+      analyser.fftSize = 2048;
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+      function drawWave() {
+        analyser.getByteTimeDomainData(dataArray);
+        console.log(dataArray);
       }
 
   </script>
