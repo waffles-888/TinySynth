@@ -8,12 +8,17 @@
     </div>
     <h1>TinySynth</h1>
     <h2>Current pitch: <span id="current-pitch"></span> Hz</h2>
-    <p>Use the buttons to start and stop the sound, and the slider to change the pitch.</p>
   </div>
   <div class="controls">
   <button onclick="randomPitch()">Random Pitch</button>
   <button onclick="startSound()">Start sound</button>
   <button onclick="stopSound()">Stop sound</button>
+  <select id="form-select" onchange="changeWave()">
+    <option value="square">Square</option>
+    <option value="sine">Sine</option>
+    <option value="triangle">Triangle</option>
+    <option value="sawtooth">Sawtooth</option>
+  </select>
 </div>
 <div class="slider">
   <input id="pitch" type="range" min="100" max="1000" value="440" oninput="changePitch()">
@@ -38,7 +43,8 @@
             return;
         }
     oscillator = audioContext.createOscillator();
-    oscillator.type = 'square';
+    const wave = document.querySelector('#form-select').value;
+    oscillator.type = wave;
     oscillator.frequency.setValueAtTime(document.querySelector('#pitch').value, audioContext.currentTime);
     oscillator.connect(gainNode);
     oscillator.start();
@@ -51,10 +57,6 @@
         oscillator = null;
     }
 
-    // Update current pitch display
-    var currentPitch = document.querySelector('#current-pitch');
-    currentPitch.innerHTML = document.querySelector('#pitch').value
-
     // Change pitch
     function changePitch() {
       const pitch = document.querySelector('#pitch').value;
@@ -65,12 +67,20 @@
         oscillator.frequency.setValueAtTime(pitch, audioContext.currentTime);
       }
 
+      // Change waveform
+      function changeWave() {
+        const wave = document.querySelector('#form-select').value;
+        if (!oscillator) {
+          return;
+        }
+        oscillator.type = wave;
+      }
+
       //waveform sound
       const analyser = audioContext.createAnalyser();
       analyser.connect(audioContext.destination);
 
       // volume
-      const volumeSlider = document.querySelector('#volume');
       const gainNode = audioContext.createGain();
       gainNode.gain.value = 0.5;
       gainNode.connect(analyser);
@@ -85,16 +95,32 @@
       // Waveform visualization
       const canvas = document.querySelector('#waveform');
       const canvasCtx = canvas.getContext('2d');
-      canvasCtx.fillStyle = '#363199';
-      canvasCtx.fillRect(0, 0, 1000, 1000);
+      
       analyser.fftSize = 2048;
       const bufferLength = analyser.frequencyBinCount;
       const dataArray = new Uint8Array(bufferLength);
+
       function drawWave() {
+        requestAnimationFrame(drawWave);
         analyser.getByteTimeDomainData(dataArray);
-        console.log(dataArray);
+        canvasCtx.fillStyle = '#363199';
+        canvasCtx.fillRect(0, 0, 1000, 1000);
+        canvasCtx.strokeStyle = '#E8E085';
+        canvasCtx.lineWidth = 2;
+        canvasCtx.beginPath();
+        for (let i = 0; i < bufferLength; i++) {
+          const x = (i / bufferLength) * canvas.width;
+          const y = (dataArray[i] / 128.0) * (canvas.height / 2);
+          if (i === 0) {
+            canvasCtx.moveTo(x, y);
+          } else {
+            canvasCtx.lineTo(x, y);
+          }
+        }
+        canvasCtx.stroke();
       }
+      drawWave();
 
   </script>
-  
+
 </body>
