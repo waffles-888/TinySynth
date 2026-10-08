@@ -1,16 +1,22 @@
 <body>
 <div style = "accent-color: #E8E085; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
   <div>
+    <div>
+      <canvas id="waveform" width="600" height="200" style="border: 4px solid #E8E085;">
+
+      </canvas>
+    </div>
     <h1>TinySynth</h1>
     <h2>Current pitch: <span id="current-pitch"></span> Hz</h2>
     <p>Use the buttons to start and stop the sound, and the slider to change the pitch.</p>
   </div>
   <div class="controls">
+  <button onclick="randomPitch()">Random Pitch</button>
   <button onclick="startSound()">Start sound</button>
   <button onclick="stopSound()">Stop sound</button>
 </div>
 <div class="slider">
-  <input id="pitch" type="range" min="100" max="1000" value="440" oninput="changePitch(), document.querySelector('#current-pitch').innerHTML = this.value">
+  <input id="pitch" type="range" min="100" max="1000" value="440" oninput="changePitch()">
   <label for="pitch">Pitch</label>
   </div>
   <div class="slider">
@@ -21,6 +27,7 @@
   <style>
     body { background: #030164; color: #E8E085; font-family: sans-serif; }
   </style>
+
   <script>
     const audioContext = new AudioContext();
     let oscillator;
@@ -51,11 +58,11 @@
     // Change pitch
     function changePitch() {
       const pitch = document.querySelector('#pitch').value;
+      document.querySelector('#current-pitch').innerHTML = pitch;
       if (!oscillator) {
         return;
       }
         oscillator.frequency.setValueAtTime(pitch, audioContext.currentTime);
-        document.querySelector('#current-pitch').innerHTML = pitch;
       }
 
       // volume
@@ -64,5 +71,19 @@
       gainNode.gain.value = 0.5;
       gainNode.connect(audioContext.destination);
 
+      // Random pitch
+      function randomPitch() {
+      const newPitch = Math.round(Math.random() * (1000 - 100) + 100);
+      document.querySelector('#pitch').value = newPitch;
+      changePitch();
+      }
+
+      // Waveform visualization
+      const canvas = document.querySelector('#waveform');
+      const canvasCtx = canvas.getContext('2d');
+      canvasCtx.fillStyle = '#363199';
+      canvasCtx.fillRect(0, 0, 1000, 1000);
+
   </script>
+  
 </body>
