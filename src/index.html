@@ -65,11 +65,21 @@
         oscillator.frequency.setValueAtTime(pitch, audioContext.currentTime);
       }
 
+      // Waveform visualization
+      const canvas = document.querySelector('#waveform');
+      const canvasCtx = canvas.getContext('2d');
+      canvasCtx.fillStyle = '#363199';
+      canvasCtx.fillRect(0, 0, 1000, 1000);
+
+      //waveform sound
+      const analyser = audioContext.createAnalyser();
+      analyser.connect(audioContext.destination);
+
       // volume
       const volumeSlider = document.querySelector('#volume');
       const gainNode = audioContext.createGain();
       gainNode.gain.value = 0.5;
-      gainNode.connect(audioContext.destination);
+      gainNode.connect(analyser);
 
       // Random pitch
       function randomPitch() {
@@ -77,12 +87,6 @@
       document.querySelector('#pitch').value = newPitch;
       changePitch();
       }
-
-      // Waveform visualization
-      const canvas = document.querySelector('#waveform');
-      const canvasCtx = canvas.getContext('2d');
-      canvasCtx.fillStyle = '#363199';
-      canvasCtx.fillRect(0, 0, 1000, 1000);
 
   </script>
   
