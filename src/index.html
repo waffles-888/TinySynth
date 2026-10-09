@@ -55,6 +55,7 @@
         if (oscillator) {
             return;
         }
+    audioContext.resume();
     oscillator = audioContext.createOscillator();
     const wave = document.querySelector('#wave-select').value;
     oscillator.type = wave;
